@@ -1,10 +1,9 @@
-
-FC := ifort 
+FC := ftn
 FFLAGS := -O
 LDFLAGS := 
 
-NETCDF_INCDIR := /smplocal/pub/NetCDF/4.1.3/include
-NETCDF_LIBDIR := /smplocal/pub/NetCDF/4.1.3/lib 
+NETCDF_INCDIR := /opt/cray/netcdf-hdf5parallel/4.4.1.1/INTEL/15.0/include
+NETCDF_LIBDIR := /opt/cray/netcdf-hdf5parallel/4.4.1.1/INTEL/15.0/lib 
 NETCDF_LIBS := -lnetcdf -lnetcdff
 
 SCRIPTS_DIR ?= ../scripts
