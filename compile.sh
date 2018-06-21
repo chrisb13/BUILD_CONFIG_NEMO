@@ -14,11 +14,11 @@
 #module load netcdf/4.1.1-intel
 
 # Fortran compiler :
-FC='ifort'
+FC='ftn'
 
 # Netcdf libraries :
-export NC_INC=" "  ## empty on adapp with modules 1) hdf5/seq/1.8.9(default); 2) netcdf/seq/4.1.3(default); 3) intel/2013.1
-export NC_LIB=" "  ## empty on adapp with modules 1) hdf5/seq/1.8.9(default); 2) netcdf/seq/4.1.3(default); 3) intel/2013.1
+export NC_INC="-I /opt/cray/netcdf-hdf5parallel/4.4.1.1/INTEL/15.0/include"  ## empty on adapp with modules 1) hdf5/seq/1.8.9(default); 2) netcdf/seq/4.1.3(default); 3) intel/2013.1
+export NC_LIB="-L /opt/cray/netcdf-hdf5parallel/4.4.1.1/INTEL/15.0/lib -lnetcdf -lnetcdff"  ## empty on adapp with modules 1) hdf5/seq/1.8.9(default); 2) netcdf/seq/4.1.3(default); 3) intel/2013.1
 #export NC_INC="-I`nc-config --includedir`"
 #export NC_LIB="`nc-config --libs` -lnetcdff"
 

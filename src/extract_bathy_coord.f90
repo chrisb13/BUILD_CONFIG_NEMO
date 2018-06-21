@@ -12,7 +12,7 @@ program modif
 ! 2- Read coarse bathymetry used for consistent bathymetry along boundaries  [if ln_coarse_bdy]
 ! 3- Find relationship between the two grids (at least where they overlap)   [if ln_coarse_bdy]
 ! 4- Extract variables on the REG grid
-! 5- Manual corrections for WED12      [ if congig == WED12 ]
+! 5- Manual corrections for WED12      [ if config == WED12 ]
 ! 6- Writing new regional bathymetry file
 ! 7- Reading coordinates on global domain
 ! 8- Writing coordinates file for the regional domain

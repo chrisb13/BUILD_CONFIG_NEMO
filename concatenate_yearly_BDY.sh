@@ -2,8 +2,9 @@
 
 CONFIG="WED12"
 BDY_DIR="$SHAREDELMER/input/nemo_WED12/BDY"
-YEARi=1993
-YEARf=2013
+BDY_DIR="/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12/BDY"
+YEARi=1996
+YEARf=1996
 
 for BDY in bdyT_tra bdyU_u3d bdyU_u2d bdyV_u3d bdyV_u2d bdyT_ice bdyT_ssh
 do

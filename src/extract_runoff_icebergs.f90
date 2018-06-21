@@ -107,7 +107,7 @@ ALLOCATE(  Melt(mx,my,mtime_counter)  )
 status = NF90_INQ_VARID(fidA,"time_counter",time_counter_ID) ; call erreur(status,.TRUE.,"inq_time_counter_ID")
 status = NF90_INQ_VARID(fidA,"nav_lon",nav_lon_ID)           ; call erreur(status,.TRUE.,"inq_nav_lon_ID")
 status = NF90_INQ_VARID(fidA,"nav_lat",nav_lat_ID)           ; call erreur(status,.TRUE.,"inq_nav_lat_ID")
-status = NF90_INQ_VARID(fidA,"Melt",Melt_ID)                 ; call erreur(status,.TRUE.,"inq_Melt_ID")
+status = NF90_INQ_VARID(fidA,"berg_total_melt",Melt_ID)                 ; call erreur(status,.TRUE.,"inq_Melt_ID")
                                       
 status = NF90_GET_VAR(fidA,time_counter_ID,time_counter) ; call erreur(status,.TRUE.,"getvar_time_counter")
 status = NF90_GET_VAR(fidA,nav_lon_ID,nav_lon)           ; call erreur(status,.TRUE.,"getvar_nav_lon")
@@ -136,8 +136,8 @@ status = NF90_INQUIRE_DIMENSION(fidMSH,dimID_t,len=mtreg) ; call erreur(status,.
 
 ALLOCATE(  tmask(mx_REG,my_REG,mzreg,mtreg)  )
 ALLOCATE(  tmask_REG(mx_REG,my_REG)  )
-ALLOCATE(  Meltreg(mx_REG,my_REG,12) )
-ALLOCATE(  tmp_Meltreg(mx_REG,my_REG,12) )
+ALLOCATE(  Meltreg(mx_REG,my_REG,mtime_counter) )
+ALLOCATE(  tmp_Meltreg(mx_REG,my_REG,mtime_counter) )
 ALLOCATE(  lonreg(mx_REG,my_REG)  ) 
 ALLOCATE(  latreg(mx_REG,my_REG)  ) 
 
