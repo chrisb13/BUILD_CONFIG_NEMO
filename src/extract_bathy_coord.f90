@@ -17,6 +17,9 @@ program modif
 ! 7- Reading coordinates on global domain
 ! 8- Writing coordinates file for the regional domain
 !
+! Updates:
+! -CB added WED025 in July, 2018
+!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 USE netcdf                                            
@@ -557,6 +560,155 @@ if ( TRIM(config) == 'WED12' ) then
       Bathymetry_isf_REG (imin(kk):imax(kk),jmin(kk):my_REG) = 0.0
       Bathymetry_REG     (imin(kk):imax(kk),jmin(kk):my_REG) = 0.0
     enddo
+
+elseif ( TRIM(config) == 'WED025' ) then
+  
+    !Added by CB (05/07/2018)..
+        !From Nico (date: Jul 5, 2018, 2:05 PM):
+        !Then, you need to adapt:
+
+        !i0 = imin_ORCA12 - xxx
+        !j0 = jmin_ORCA12 - yyy
+
+        !where xxx and yyy are the nn_imin_extract and nn_jmin_extract that you specify in your namelist_WED025 (in the end, i0 and j0 will be zero, but this is used to leave the manual treatment unchanged if you change your domain size later on).
+
+        !Then, you need to change the definition of imin(:), imax(:) and jmin(:), basically by dividing all the hard-written numbers by 3 (rounding under for numbers in imax(:) and imin(:) and above for numbers in jmin(:)). Then generate the bathymetry and check that there is no ocean point to the West of the Antarctic Peninsula. Adjust by shifting these numbers by 1 or 2 points where needed and re-generate the bathymetry...
+
+        !The rest of the WED12 section probably won't require any modification.
+
+        ! Note that you DO NOT have to change the following in you change the domain
+        ! size
+        ! through modifications of nn_imin_extract, nn_imax_extract, ... in the
+        ! namelist 
+
+    ! To keep the boxes at the same position:
+    i0 = imin_ORCA12 - 822
+    j0 = jmin_ORCA12 - 54
+
+    !! correction to avoid a closed cavity of 2x2x2 pts (identified after first
+    !! mesh_mask creation)
+    !isf_draft_REG     (i0+241:i0+242,j0+667:j0+668) = 0.0
+    !Bathymetry_isf_REG(i0+241:i0+242,j0+667:j0+668) = 0.0
+    !
+    !! no isf along eastern boundary (adapt manually to adjust more accurately) :
+    !isf_draft_REG     (i0+1095:mx_REG,j0+668:j0+703) = 0.0
+    !Bathymetry_isf_REG(i0+1095:mx_REG,j0+668:j0+703) = Bathymetry_REG(i0+1095:mx_REG,j0+668:j0+703)
+
+    ! boxes to fill the Bellingshausen Sea : filled over [imin:imax,jmin:my]
+    imin = (/   1+i0 , 64+i0 , 71+i0 , 79+i0 , 84+i0 , 91+i0 , 95+i0 , 99+i0 /)
+    imax = (/ 63+i0 , 70+i0 , 78+i0 , 84+i0 , 91+i0 , 95+i0 , 99+i0 , &
+    &           NINT(FLOAT(108+i0+imin_ORCA12-1-bi)/ai)*ai+bi-imin_ORCA12+1-1 /) ! WARNING: last number must match with ORCA025 (i.e. next unmasked point neads to be on ORCA025) !!
+    jmin = (/ 165+j0 , 269+j0 , 279+j0 , 288+j0 , 292+j0 , 298+j0 ,            &
+    &           NINT(FLOAT(300+j0+jmin_ORCA12-1-bj)/aj)*aj+bj-jmin_ORCA12+1+1 ,&
+    &           NINT(FLOAT(301+j0+jmin_ORCA12-1-bj)/aj)*aj+bj-jmin_ORCA12+1+1 /) ! WARNING: last two numbers must match with ORCA025 (i.e. next unmasked point neads to be on ORCA025) !!
+
+    do kk=1,size(imin)
+      imin(kk) = MIN( MAX( 1, imin(kk) ), mx_REG )
+      imax(kk) = MIN( MAX( 1, imax(kk) ), mx_REG )
+      jmin(kk) = MIN( MAX( 1, jmin(kk) ), my_REG )
+    enddo     
+ 
+    write(*,*) 'Note for future bdy building:'
+    write(*,*) '                    '
+    write(*,*) '  ii_bdy_west(1)  = ', imax(8)+1
+    write(*,*) '  j1_bdy_west(1)  = ', jmin(8)
+    write(*,*) '  j2_bdy_west(1)  = ', my_REG-1 ! given that jmax(8)=my_REG-1
+    write(*,*) '                    '
+    write(*,*) '  i1_bdy_north(1) = ', imin(8)
+    write(*,*) '  i2_bdy_north(1) = ', imax(8)
+    write(*,*) '  jj_bdy_north(1) = ', jmin(8)-1
+    write(*,*) '                    '
+    write(*,*) '  i1_bdy_north(2) = ', imax(8)+2
+    write(*,*) '  i2_bdy_north(2) = ', mx_REG-2 ! -2 because east bdy already contains mx_REG-1
+    write(*,*) '  jj_bdy_north(2) = ', my_REG-1
+    write(*,*) '                    '
+
+    !----- put ORCA025 along modified North-Western corner :
+    !- bdy_west(1) :
+    do jREG=jmin(8),my_REG
+      do iREG=imax(8)+1,imax(8)+npts
+        isf_draft_REG     (iREG,jREG) = isf_draft_ORCA025      ( NINT(FLOAT(iREG+imin_ORCA12-1-bi)/ai), NINT(FLOAT(jREG+jmin_ORCA12-1-bj)/aj) )
+        Bathymetry_isf_REG(iREG,jREG) = Bathymetry_isf_ORCA025 ( NINT(FLOAT(iREG+imin_ORCA12-1-bi)/ai), NINT(FLOAT(jREG+jmin_ORCA12-1-bj)/aj) )
+        Bathymetry_REG    (iREG,jREG) = Bathymetry_ORCA025     ( NINT(FLOAT(iREG+imin_ORCA12-1-bi)/ai), NINT(FLOAT(jREG+jmin_ORCA12-1-bj)/aj) )
+      enddo
+    enddo
+    !- bdy_north(1) :
+    do jREG=jmin(8)-npts, jmin(8)-1
+      do iREG=imin(8),imax(8)
+        isf_draft_REG     (iREG,jREG) = isf_draft_ORCA025      ( NINT(FLOAT(iREG+imin_ORCA12-1-bi)/ai), NINT(FLOAT(jREG+jmin_ORCA12-1-bj)/aj) )
+        Bathymetry_isf_REG(iREG,jREG) = Bathymetry_isf_ORCA025 ( NINT(FLOAT(iREG+imin_ORCA12-1-bi)/ai), NINT(FLOAT(jREG+jmin_ORCA12-1-bj)/aj) )
+        Bathymetry_REG    (iREG,jREG) = Bathymetry_ORCA025     ( NINT(FLOAT(iREG+imin_ORCA12-1-bi)/ai), NINT(FLOAT(jREG+jmin_ORCA12-1-bj)/aj) )
+      enddo
+    enddo
+
+    !---- smooth transitions :
+    !- bdy_west(1) :
+    do jREG=jmin(8),my_REG
+      do iREG=imax(8)+npts+1,imax(8)+2*npts
+        isf_draft_REG     (iREG,jREG) = (   (imax(8)+2*npts-iREG+1) * isf_draft_ORCA025 ( NINT(FLOAT(iREG+imin_ORCA12-1-bi)/ai), NINT(FLOAT(jREG+jmin_ORCA12-1-bj)/aj) ) &
+        &                                 +     (iREG-imax(8)-npts) * isf_draft_ORCA12  ( iREG+imin_ORCA12-1, jREG+jmin_ORCA12-1 ) ) / (npts+1)
+        Bathymetry_isf_REG(iREG,jREG) = (   (imax(8)+2*npts-iREG+1) * Bathymetry_isf_ORCA025 ( NINT(FLOAT(iREG+imin_ORCA12-1-bi)/ai), NINT(FLOAT(jREG+jmin_ORCA12-1-bj)/aj) ) &
+        &                                 +     (iREG-imax(8)-npts) * Bathymetry_isf_ORCA12  ( iREG+imin_ORCA12-1, jREG+jmin_ORCA12-1 ) ) / (npts+1)
+        Bathymetry_REG    (iREG,jREG) = (   (imax(8)+2*npts-iREG+1) * Bathymetry_ORCA025 ( NINT(FLOAT(iREG+imin_ORCA12-1-bi)/ai), NINT(FLOAT(jREG+jmin_ORCA12-1-bj)/aj) ) &
+        &                                 +     (iREG-imax(8)-npts) * Bathymetry_ORCA12  ( iREG+imin_ORCA12-1, jREG+jmin_ORCA12-1 ) ) / (npts+1)
+      enddo
+    enddo
+    !- bdy_north(1) :
+    do jREG=jmin(8)-2*npts,jmin(8)-npts-1
+      do iREG=imin(8),imax(8)
+        isf_draft_REG     (iREG,jREG) = ( (jREG-jmin(8)+2*npts+1)    * isf_draft_ORCA025 ( NINT(FLOAT(iREG+imin_ORCA12-1-bi)/ai), NINT(FLOAT(jREG+jmin_ORCA12-1-bj)/aj) ) &
+        &                                      + (jmin(8)-npts-jREG) * isf_draft_ORCA12  ( iREG+imin_ORCA12-1, jREG+jmin_ORCA12-1 ) ) / (npts+1)                     
+        Bathymetry_isf_REG(iREG,jREG) = ( (jREG-jmin(8)+2*npts+1)    * Bathymetry_isf_ORCA025 ( NINT(FLOAT(iREG+imin_ORCA12-1-bi)/ai), NINT(FLOAT(jREG+jmin_ORCA12-1-bj)/aj) ) &
+        &                                      + (jmin(8)-npts-jREG) * Bathymetry_isf_ORCA12  ( iREG+imin_ORCA12-1, jREG+jmin_ORCA12-1 ) ) / (npts+1)                     
+        Bathymetry_REG    (iREG,jREG) = ( (jREG-jmin(8)+2*npts+1)    * Bathymetry_ORCA025 ( NINT(FLOAT(iREG+imin_ORCA12-1-bi)/ai), NINT(FLOAT(jREG+jmin_ORCA12-1-bj)/aj) ) &
+        &                                      + (jmin(8)-npts-jREG) * Bathymetry_ORCA12  ( iREG+imin_ORCA12-1, jREG+jmin_ORCA12-1 ) ) / (npts+1)                     
+      enddo
+    enddo
+
+    !- fill bellingshausen:
+    do kk=1,8
+      isf_draft_REG      (imin(kk):imax(kk),jmin(kk):my_REG) = 0.0
+      Bathymetry_isf_REG (imin(kk):imax(kk),jmin(kk):my_REG) = 0.0
+      Bathymetry_REG     (imin(kk):imax(kk),jmin(kk):my_REG) = 0.0
+    enddo
+
+    !- fix points that were accidentely filled in..
+    !write(*,*) 'Doing dodgy fix.. '
+    !the one, near the northern boundary
+    if ( ln_isfcav) then
+      isf_draft_REG      (98,300) = 0.0
+      Bathymetry_isf_REG (98,300) = 143.17264
+    endif
+    Bathymetry_REG       (98,300) = 143.17264
+
+    !the cluster of four dodgy points..
+    !lower-left corner
+    if ( ln_isfcav) then
+      isf_draft_REG      (89,291) = 0.0
+      Bathymetry_isf_REG (89,291) = 401.31827
+    endif
+    Bathymetry_REG       (89,291) = 401.31827
+
+    !lower-right corner
+    if ( ln_isfcav) then
+      isf_draft_REG      (90,291) = 0.0
+      Bathymetry_isf_REG (90,291) = 548.1518
+    endif
+    Bathymetry_REG       (90,291) = 548.1518
+
+    !upper-left corner
+    if ( ln_isfcav) then
+      isf_draft_REG      (89,292) = 0.0
+      Bathymetry_isf_REG (89,292) = 179.68153
+    endif
+    Bathymetry_REG       (89,292) = 179.68153
+
+    !upper-right corner
+    if ( ln_isfcav) then
+      isf_draft_REG      (90,292) = 0.0
+      Bathymetry_isf_REG (90,292) = 338.92303
+    endif
+    Bathymetry_REG       (90,292) = 338.92303
 
 endif
 
