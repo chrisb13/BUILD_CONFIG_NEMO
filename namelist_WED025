@@ -10,7 +10,7 @@
 !-------------------------------------------------------------------------------------------------------------------------------
 &general
 config     = 'WED025'                                            ! config name, e.g. 'WED12', 'AMU12', etc
-config_dir = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025' ! dir where new netcdf files will be stored
+config_dir = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_2' ! dir where new netcdf files will be stored
 /
 !--------------------------------------------------------------------------------------------
 &griddata
@@ -41,9 +41,8 @@ rn_lonref             =  10.0
 nn_init               =    2   !  1 -> initial state is an extraction from the corresponding global/large-scale grid [ if ln_coarse_bdy = false ]
                                !  2 -> initial state from coarser resolution [ if ln_coarse_bdy = true ]     
 file_in_mask_extract  = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc' ! Global/large-scale file, according to nn_init 
-                                                                                         ! (contains tmask, nav_lat, nav_lon, nav_lev)
-file_in_T             = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mi-an854o_1m_19960101_20050130_01_grid_T.nc'  ! Temperature (same grid as file_in_mask_extract)
-file_in_S             = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mi-an854o_1m_19960101_20050130_01_grid_T.nc'  ! Salinity    (same grid as file_in_mask_extract)
+file_in_T             = '/fs2/n02/n02/chbull/RawData/mi-an854/onm.nc.file/mi-an854o_1m_19760301_19760331_grid_T.nc'  ! Temperature (same grid as file_in_mask_extract)
+file_in_S             = '/fs2/n02/n02/chbull/RawData/mi-an854/onm.nc.file/mi-an854o_1m_19760301_19760331_grid_T.nc'  ! Salinity    (same grid as file_in_mask_extract)
 nn_eosmatch           =   0    ! match between model equ. of state and istate equ. of state :
                                !    = 0, regional config in TEOS-10 but file_in_T and file_in_S in EOS-80
                                !    = 1, same equation of state everywhere
@@ -107,7 +106,7 @@ data_suffix_S         = '_grid_T' ! suffix for salinity
 data_suffix_U         = '_grid_U' ! suffix for zonal velocity
 data_suffix_V         = '_grid_V' ! suffix for meridional velocity
 data_suffix_ssh       = '_grid_T' ! suffix for SSH
-data_suffix_ice       = '_icemod'! suffix for sea ice variables
+data_suffix_ice       = '_interp_icemodrdy' ! suffix for sea ice variables
 sep1                  = 'yyy' 
 sep2                  = 'xxx'
 file_data_mask        = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc' ! Mask for global/large-scale file
@@ -163,10 +162,24 @@ file_sss_mask        = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot
 /
 !-------------------------------------------------------------------------------------------------------------------------------
 &runoff
+! Dataset used as lateral boundary conditions (same grid as file_in_mask_extract and as file_in_bathy_bdy if it is used)
+! The sss dataset is assumed to be in files of one of the following types (YYYY is 4-digit year, MM 2-digit month and DD 2-digit day):
+!
+!        <rrr_dir>/YYYY/<rrr_prefix>YYYY<rrr_sep1>MM<rrr_sep2>DD<rrr_suffix>.nc
+! or:    <rrr_dir>/YYYY/<rrr_prefix>YYYY<rrr_sep1>MM<rrr_suffix>.nc
+! or:    <rrr_dir>/<rrr_prefix>YYYY<rrr_sep1>MM<rrr_sep2>DD<rrr_suffix>.nc
+! or:    <rrr_dir>/<rrr_prefix>YYYY<rrr_sep1>MM<rrr_suffix>.nc
+! or:    <rrr_dir>/<rrr_prefix>.nc        [ for climatology ]
+!
+rrr_dir              = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025/bdy_data'
+rrr_prefix           = 'mi-an854o_1m_'
+rrr_sep1             = 'yyy'
+rrr_sep2             = 'xxx'
+rrr_suffix           = '_grid_T'
+nn_rrr_yeari         = 1976    ! First year to proceed
+nn_rrr_yearf         = 2005    ! Last year to proceed
 nn_band              = 50   ! Thickness of the band along the coast where we don't do SSS restoring (in nb of grid pts)
-file_mask_runoff     = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc'      ! mask for global/large-scale file
-!file_runoff_in       = '/store/njourd/ORCA025/SOUTHG2V3_ORCA025_climato_Icebergs.nc'  ! runoff for global/large-scale file
-file_runoff_in       = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mi-an854o_1m_19960101_20050130_01_grid_T.nc'  ! runoff for global/large-scale file
+file_mask_runoff     = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc'    ! mask for global/large-scale file
 /
 !-------------------------------------------------------------------------------------------------------------------------------
 &chloro

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-CONFIG="AMUXL12"
-RNF_DIR="$SHAREDELMER/input/nemo_${CONFIG}/RNF"
-YEARi=1972
-YEARf=2016
+CONFIG="WED025"
+RNF_DIR="/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025/RNF_CAT"
+YEARi=1976
+YEARf=2005
 
 #----------------------------------------------------------------------------
 

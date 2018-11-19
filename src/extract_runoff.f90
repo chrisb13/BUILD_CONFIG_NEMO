@@ -291,6 +291,7 @@ DO kyear=nn_rrr_yeari,nn_rrr_yearf
         if ( status .ne. 0 ) status = NF90_INQ_VARID(fidRNF,"berg_melt",runoff_ID)
         if ( status .ne. 0 ) status = NF90_INQ_VARID(fidRNF,"Melt",runoff_ID)
         if ( status .ne. 0 ) status = NF90_INQ_VARID(fidRNF,"melt",runoff_ID)
+        if ( status .ne. 0 ) status = NF90_INQ_VARID(fidRNF,"berg_total_melt",runoff_ID)
         call erreur(status,.TRUE.,"inq_runoff_ID")
         
         status = NF90_GET_VAR(fidRNF,time_ID,time)                  ; call erreur(status,.TRUE.,"getvar_time")
@@ -419,7 +420,7 @@ DO kyear=nn_rrr_yeari,nn_rrr_yearf
         status = NF90_PUT_ATT(fidM,time_ID,"axis","T")                          ; call erreur(status,.TRUE.,"put_att_time_ID")
         
         status = NF90_PUT_ATT(fidM,NF90_GLOBAL,"history","Created using extract_runoff.f90")
-        status = NF90_PUT_ATT(fidM,NF90_GLOBAL,"tools","https://github.com/nicojourdain/BUILD_CONFIG_NEMO_2")
+        status = NF90_PUT_ATT(fidM,NF90_GLOBAL,"tools","https://github.com/chrisb13/BUILD_CONFIG_NEMO")
         call erreur(status,.TRUE.,"put_att_GLOBAL")
         
         status = NF90_ENDDEF(fidM) ; call erreur(status,.TRUE.,"fin_definition") 
