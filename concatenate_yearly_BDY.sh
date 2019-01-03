@@ -5,11 +5,14 @@ BDY_DIR="$SHAREDELMER/input/nemo_WED12/BDY"
 BDY_DIR="/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12/BDY"
 BDY_DIR="/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025/BDY_CP"
 BDY_DIR="/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_2/BDY_CAT"
-YEARi=1976
-YEARf=2005
+BDY_DIR="/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_JRA/BDY"
+BDY_DIR="/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_JRA_2/BDY"
+YEARi=2003
+YEARf=2017
 
-#for BDY in bdyT_tra bdyU_u3d bdyU_u2d bdyV_u3d bdyV_u2d bdyT_ice bdyT_ssh
-for BDY in bdyT_tra bdyU_u3d bdyU_u2d bdyV_u3d bdyV_u2d bdyT_ssh
+#for BDY in bdyT_tra bdyU_u3d bdyU_u2d bdyV_u3d bdyV_u2d bdyT_ssh
+#for BDY in bdyT_ice 
+for BDY in bdyT_tra bdyU_u3d bdyU_u2d bdyV_u3d bdyV_u2d bdyT_ice bdyT_ssh
 do
 
 for YEAR in $(seq $YEARi $YEARf)

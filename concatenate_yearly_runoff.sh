@@ -2,8 +2,10 @@
 
 CONFIG="WED025"
 RNF_DIR="/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025/RNF_CAT"
-YEARi=1976
-YEARf=2005
+RNF_DIR="/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_JRA/RNF"
+RNF_DIR="/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_JRA_2/RNF"
+YEARi=2003
+YEARf=2017
 
 #----------------------------------------------------------------------------
 
