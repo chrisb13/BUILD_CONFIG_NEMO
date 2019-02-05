@@ -10,7 +10,8 @@
 !-------------------------------------------------------------------------------------------------------------------------------
 &general
 config     = 'WED025'                                            ! config name, e.g. 'WED12', 'AMU12', etc
-config_dir = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_2' ! dir where new netcdf files will be stored
+config_dir = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED025_3' ! dir where new netcdf files will be stored
+
 /
 !--------------------------------------------------------------------------------------------
 &griddata
@@ -21,11 +22,11 @@ config_dir = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_2' ! dir where n
 !lat_idx_F  379   379    9    54
 !lon_idx_F  822  1141  746  1142
 
-file_in_bathy_extract = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/eORCA025_bathymetry_isf_v2.3.nc'                 ! Bathy on the grid from which we extract the regional domain (e.g. eORCA12).
-file_in_coord_extract = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/ORCA025_coordinates_isf_filled.nc'                     ! Coordinates of grid from which we extract regional domain (e.g. eORCA12).
+file_in_bathy_extract = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/eORCA025_bathymetry_isf_v2.3.nc'                 ! Bathy on the grid from which we extract the regional domain (e.g. eORCA12).
+file_in_coord_extract = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/ORCA025_coordinates_isf_filled.nc'                     ! Coordinates of grid from which we extract regional domain (e.g. eORCA12).
 ln_coarse_bdy         = .true.                                              ! true if coarser simulation is applied along 
                                                                             !       the boundaries (then fill file_in_bathy_bdy)
-file_in_bathy_bdy     = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/eORCA025_bathymetry_isf_v2.3.nc' ! Bathy on the grid corresponding to the lateral boundary conditions (e.g. ORCA025).
+file_in_bathy_bdy     = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/eORCA025_bathymetry_isf_v2.3.nc' ! Bathy on the grid corresponding to the lateral boundary conditions (e.g. ORCA025).
 ln_isfcav             = .true.                                              ! true if the domain includes ice shelves.
 ! Choose the domain bounds on eORCA12 grid (WARNING: will be rounded to closest point of the coarse grid if ln_coarse_bdy = true) :
 nn_imin_extract       = 822
@@ -40,7 +41,7 @@ rn_lonref             =  10.0
 &init
 nn_init               =    2   !  1 -> initial state is an extraction from the corresponding global/large-scale grid [ if ln_coarse_bdy = false ]
                                !  2 -> initial state from coarser resolution [ if ln_coarse_bdy = true ]     
-file_in_mask_extract  = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc' ! Global/large-scale file, according to nn_init 
+file_in_mask_extract  = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc' ! Global/large-scale file, according to nn_init 
 file_in_T             = '/fs2/n02/n02/chbull/RawData/mi-an854/onm.nc.file/mi-an854o_1m_19760301_19760331_grid_T.nc'  ! Temperature (same grid as file_in_mask_extract)
 file_in_S             = '/fs2/n02/n02/chbull/RawData/mi-an854/onm.nc.file/mi-an854o_1m_19760301_19760331_grid_T.nc'  ! Salinity    (same grid as file_in_mask_extract)
 nn_eosmatch           =   0    ! match between model equ. of state and istate equ. of state :
@@ -99,7 +100,7 @@ jj_bdy_south(1)       =    0    ! j-index for southern boundary (ocean T-pt, sta
 ! or:    <data_dir>/<data_prefix>YYYY<sep1>MM<sep2>DD<data_suffix>.nc
 ! or:    <data_dir>/<data_prefix>YYYY<sep1>MM<data_suffix>.nc
 !
-data_dir              = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025/bdy_data'
+data_dir              = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED025_3/bdy_data'
 data_prefix           = 'mi-an854o_1m_'
 data_suffix_T         = '_grid_T' ! suffix for temperature
 data_suffix_S         = '_grid_T' ! suffix for salinity
@@ -109,11 +110,11 @@ data_suffix_ssh       = '_grid_T' ! suffix for SSH
 data_suffix_ice       = '_interp_icemodrdy' ! suffix for sea ice variables
 sep1                  = 'yyy' 
 sep2                  = 'xxx'
-file_data_mask        = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc' ! Mask for global/large-scale file
+file_data_mask        = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc' ! Mask for global/large-scale file
                                                                                          ! (contains umask, vmask)
-file_data_zgr         = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc'  ! Vertical mesh sizes (for btp vel.)
+file_data_zgr         = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc'  ! Vertical mesh sizes (for btp vel.)
                                                                                          ! (contains e3u_0 or e3u and e3v_0 or e3v)
-file_data_hgr         = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc'  ! Horizontal mesh sizes (for btp vel.)
+file_data_hgr         = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc'  ! Horizontal mesh sizes (for btp vel.)
 nn_yeari              =  1976   ! initial year for BDYs
 nn_yearf              =  2005   ! final year for BDYs
 nn_bdy_eosmatch       =   0     ! match between model equ. of state and BDY equ. of state :
@@ -122,7 +123,7 @@ nn_bdy_eosmatch       =   0     ! match between model equ. of state and BDY equ.
 /
 !-------------------------------------------------------------------------------------------------------------------------------
 &bdy_tide
-tide_dir              = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_Ute/FES2012'
+tide_dir              = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_Ute/FES2012'
 ! name of the nn_harm tidal constituents :
 harm( 1)              = 'M2  '  ! name of 1st tidal constituent (4 characters)
 harm( 2)              = 'S2  '  ! name of 2nd tidal constituent (4 characters)
@@ -157,7 +158,7 @@ nn_sss_yearf         = 2013    ! Last year to proceed
 nn_sss_eosmatch      = 0       ! match between model equ. of state and SSS restoring file :
                                !    = 0, regional config in TEOS-10 but SSS file in EOS-80
                                !    = 1, same equation of state everywhere
-file_sss_mask        = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc' ! Mask for global/large-scale file
+file_sss_mask        = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc' ! Mask for global/large-scale file
                                                                                         ! (contains tmask)
 /
 !-------------------------------------------------------------------------------------------------------------------------------
@@ -171,7 +172,7 @@ file_sss_mask        = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot
 ! or:    <rrr_dir>/<rrr_prefix>YYYY<rrr_sep1>MM<rrr_suffix>.nc
 ! or:    <rrr_dir>/<rrr_prefix>.nc        [ for climatology ]
 !
-rrr_dir              = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025/bdy_data'
+rrr_dir              = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED025_3/bdy_data'
 rrr_prefix           = 'mi-an854o_1m_'
 rrr_sep1             = 'yyy'
 rrr_sep2             = 'xxx'
@@ -179,11 +180,11 @@ rrr_suffix           = '_grid_T'
 nn_rrr_yeari         = 1976    ! First year to proceed
 nn_rrr_yearf         = 2005    ! Last year to proceed
 nn_band              = 50   ! Thickness of the band along the coast where we don't do SSS restoring (in nb of grid pts)
-file_mask_runoff     = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc'    ! mask for global/large-scale file
+file_mask_runoff     = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc'    ! mask for global/large-scale file
 /
 !-------------------------------------------------------------------------------------------------------------------------------
 &chloro
-file_chloro_in       = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_Ute/SOUTHG2V3_ORCA025_chlorophyll.nc'  ! runoff for global/large-scale file
+file_chloro_in       = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_Ute/SOUTHG2V3_ORCA025_chlorophyll.nc'  ! runoff for global/large-scale file
 
 rn_chla              = 0.30   ! default CHLA (to fill places in the regional domain uncovered in the global file)
 /
