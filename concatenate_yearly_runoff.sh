@@ -5,9 +5,10 @@ RNF_DIR="/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025/RNF_CAT"
 RNF_DIR="/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_JRA/RNF"
 RNF_DIR="/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_JRA_2/RNF"
 RNF_DIR="/nerc/n02/n02/chbull/nemo/bld_configs/input_WED025_3/RNF"
+RNF_DIR="/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_JRAbq182/RNF"
 
 YEARi=1976
-YEARf=2005
+YEARf=2000
 
 #----------------------------------------------------------------------------
 

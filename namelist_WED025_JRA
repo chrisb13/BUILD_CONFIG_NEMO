@@ -3,14 +3,15 @@
 !
 ! namelist for pre-processing NEMO simulations
 !
-! CB: updated for WED025_JRA simulations (Nov, 2018)
+! CB: updated for WED025_JRA simulations (Nov, 2018) 
+!     and now WED025_JRAbq182 (no inter-annual variability) simulations (Feb, 2020)
 !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 !-------------------------------------------------------------------------------------------------------------------------------
 &general
 config     = 'WED025'                                            ! config name, e.g. 'WED12', 'AMU12', etc
-config_dir = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_JRA' ! dir where new netcdf files will be stored
+config_dir = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_JRAbq182' ! dir where new netcdf files will be stored
 /
 !--------------------------------------------------------------------------------------------
 &griddata
@@ -21,11 +22,11 @@ config_dir = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_JRA' ! dir where
 !lat_idx_F  379   379    9    54
 !lon_idx_F  822  1141  746  1142
 
-file_in_bathy_extract = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/eORCA025_bathymetry_isf_v2.3.nc'                 ! Bathy on the grid from which we extract the regional domain (e.g. eORCA12).
-file_in_coord_extract = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/ORCA025_coordinates_isf_filled.nc'                     ! Coordinates of grid from which we extract regional domain (e.g. eORCA12).
+file_in_bathy_extract = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/eORCA025_bathymetry_isf_v2.3.nc'                 ! Bathy on the grid from which we extract the regional domain (e.g. eORCA12).
+file_in_coord_extract = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/ORCA025_coordinates_isf_filled.nc'                     ! Coordinates of grid from which we extract regional domain (e.g. eORCA12).
 ln_coarse_bdy         = .true.                                              ! true if coarser simulation is applied along 
                                                                             !       the boundaries (then fill file_in_bathy_bdy)
-file_in_bathy_bdy     = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/eORCA025_bathymetry_isf_v2.3.nc' ! Bathy on the grid corresponding to the lateral boundary conditions (e.g. ORCA025).
+file_in_bathy_bdy     = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/eORCA025_bathymetry_isf_v2.3.nc' ! Bathy on the grid corresponding to the lateral boundary conditions (e.g. ORCA025).
 ln_isfcav             = .true.                                              ! true if the domain includes ice shelves.
 ! Choose the domain bounds on eORCA12 grid (WARNING: will be rounded to closest point of the coarse grid if ln_coarse_bdy = true) :
 nn_imin_extract       = 822
@@ -40,9 +41,10 @@ rn_lonref             =  10.0
 &init
 nn_init               =    2   !  1 -> initial state is an extraction from the corresponding global/large-scale grid [ if ln_coarse_bdy = false ]
                                !  2 -> initial state from coarser resolution [ if ln_coarse_bdy = true ]     
-file_in_mask_extract  = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc' ! Global/large-scale file, according to nn_init 
-file_in_T             = '/fs2/n02/n02/chbull/RawData/u-bc337/onm.nc.file/nemo_bc337o_1m_19760301-19760401_grid-T.nc'  ! Temperature (same grid as file_in_mask_extract)
-file_in_S             = '/fs2/n02/n02/chbull/RawData/u-bc337/onm.nc.file/nemo_bc337o_1m_19760301-19760401_grid-T.nc' ! Salinity    (same grid as file_in_mask_extract)
+
+file_in_mask_extract  = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc' ! Global/large-scale file, according to nn_init 
+file_in_T             = '/fs2/n02/n02/chbull/RawData/u-bq182/onm.nc.file/nemo_bq182o_1m_19760301-19760401_grid-T.nc'  ! Temperature (same grid as file_in_mask_extract)
+file_in_S             = '/fs2/n02/n02/chbull/RawData/u-bq182/onm.nc.file/nemo_bq182o_1m_19760301-19760401_grid-T.nc' ! Salinity    (same grid as file_in_mask_extract)
 nn_eosmatch           =   0    ! match between model equ. of state and istate equ. of state :
                                !    = 0, regional config in TEOS-10 but file_in_T and file_in_S in EOS-80
                                !    = 1, same equation of state everywhere
@@ -99,8 +101,8 @@ jj_bdy_south(1)       =    0    ! j-index for southern boundary (ocean T-pt, sta
 ! or:    <data_dir>/<data_prefix>YYYY<sep1>MM<sep2>DD<data_suffix>.nc
 ! or:    <data_dir>/<data_prefix>YYYY<sep1>MM<data_suffix>.nc
 !
-data_dir              = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_JRA/bdy_data'
-data_prefix           = 'nemo_bc337o_1m_'
+data_dir              = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_JRAbq182/bdy_data'
+data_prefix           = 'nemo_bq182o_1m_'
 data_suffix_T         = '_grid-T' ! suffix for temperature
 data_suffix_S         = '_grid-T' ! suffix for salinity
 data_suffix_U         = '_grid-U' ! suffix for zonal velocity
@@ -109,11 +111,11 @@ data_suffix_ssh       = '_grid-T' ! suffix for SSH
 data_suffix_ice       = '_interp_icemodrdy' ! suffix for sea ice variables
 sep1                  = 'yyy' 
 sep2                  = 'xxx'
-file_data_mask        = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc' ! Mask for global/large-scale file
+file_data_mask        = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc' ! Mask for global/large-scale file
                                                                                          ! (contains umask, vmask)
-file_data_zgr         = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc'  ! Vertical mesh sizes (for btp vel.)
+file_data_zgr         = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc'  ! Vertical mesh sizes (for btp vel.)
                                                                                          ! (contains e3u_0 or e3u and e3v_0 or e3v)
-file_data_hgr         = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc'  ! Horizontal mesh sizes (for btp vel.)
+file_data_hgr         = '/nerc/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/mesh_mask_eORCA025-GO7.nc'  ! Horizontal mesh sizes (for btp vel.)
 nn_yeari              =  1976   ! initial year for BDYs
 nn_yearf              =  2017   ! final year for BDYs
 nn_bdy_eosmatch       =   0     ! match between model equ. of state and BDY equ. of state :
@@ -171,9 +173,10 @@ file_sss_mask        = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot
 ! or:    <rrr_dir>/<rrr_prefix>YYYY<rrr_sep1>MM<rrr_suffix>.nc
 ! or:    <rrr_dir>/<rrr_prefix>.nc        [ for climatology ]
 !
-rrr_dir              = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_JRA/bdy_data'
 
-rrr_prefix           = 'nemo_bc337o_1m_'
+rrr_dir              = '/fs2/n02/n02/chbull/nemo/bld_configs/input_WED025_JRAbq182/bdy_data'
+
+rrr_prefix           = 'nemo_bq182o_1m_'
 rrr_sep1             = 'yyy'
 rrr_sep2             = 'xxx'
 rrr_suffix           = '_grid-T'
